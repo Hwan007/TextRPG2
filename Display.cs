@@ -39,7 +39,10 @@ public partial class FourWeekHomework
         {
             SBList[(int)window].Clear();
         }
-
+        /// <summary>
+        /// 해당 윈도우에 업데이트된 정보를 출력한다.
+        /// </summary>
+        /// <param name="window">윈도우 종류</param>
         public static void UpdateWindow(WindowType window)
         {
             StringBuilder[] sbs = FixLine(window);
@@ -49,7 +52,9 @@ public partial class FourWeekHomework
                 Console.Write(sbs[i]);
             }
         }
-
+        /// <summary>
+        /// 현재 윈도우가 아닌 모든 윈도우를 다시 업데이트된 정보로 그린다.
+        /// </summary>
         public static void UpdateAllBackWindow()
         {
             Stack<WindowType> tempWindowStack = new Stack<WindowType>();
@@ -66,7 +71,9 @@ public partial class FourWeekHomework
             }
 
         }
-
+        /// <summary>
+        /// 현재 윈도우를 업데이트된 정보로 출력한다.
+        /// </summary>
         public static void UpdateCurrentWindow()
         {
             StringBuilder[] sbs = FixLine(currentWindow);
@@ -77,18 +84,7 @@ public partial class FourWeekHomework
             }
         }
 
-        public enum WindowType
-        {
-            Full,
-            Top,
-            Bottom,
-            Left,
-            Right,
-            Center,
-            End
-        }
-
-        struct WindowSize
+        struct sWindowSize
         {
             public int Width;
             public int Height;
@@ -96,13 +92,17 @@ public partial class FourWeekHomework
             public int StartY;
         }
 
-        private static WindowSize[] mWindowSizes = new WindowSize[(int)WindowType.End] {
-        new WindowSize() { Width=80-4, Height=20-2, StartX=+2, StartY=0+1 },
-        new WindowSize() { Width=80-4, Height=10-2, StartX=+2, StartY=0+1 },
-        new WindowSize() { Width=80-4, Height=10-2, StartX=+2, StartY=10+1 },
-        new WindowSize() { Width=40-4, Height=20-2, StartX=+2, StartY=0+1 },
-        new WindowSize() { Width=40-4, Height=20-2, StartX=40+2, StartY=0+1 },
-        new WindowSize() { Width=40-4, Height=10-2, StartX=20+2, StartY=5+1 },
+        /// <summary>
+        /// 각 윈도우에 대한 위치와 사이즈에 대한 정보.
+        /// 윈도우 종류에 대해서는 eWindowType를 참고.
+        /// </summary>
+        private static sWindowSize[] mWindowSizes = new sWindowSize[(int)WindowType.End] {
+        new sWindowSize() { Width=80-4, Height=20-2, StartX=+2, StartY=0+1 },
+        new sWindowSize() { Width=80-4, Height=10-2, StartX=+2, StartY=0+1 },
+        new sWindowSize() { Width=80-4, Height=10-2, StartX=+2, StartY=10+1 },
+        new sWindowSize() { Width=40-4, Height=20-2, StartX=+2, StartY=0+1 },
+        new sWindowSize() { Width=40-4, Height=20-2, StartX=40+2, StartY=0+1 },
+        new sWindowSize() { Width=40-4, Height=10-2, StartX=20+2, StartY=5+1 },
         };
 
         /// <summary>
@@ -157,22 +157,11 @@ public partial class FourWeekHomework
             currentWindow = window;
         }
 
-        public static void CloseWindow(WindowType window)
+        public static void CloseCurrentWindow()
         {
             currentWindow = windowStack.Pop();
             UpdateAllBackWindow();
             UpdateCurrentWindow();
-        }
-
-        public enum ColorType
-        {
-            Gold = 178,
-            Red = 160,
-            Gray = 7,
-            White = 15,
-            Black = 16,
-            Orange = 208,
-            PurpleBlue = 75
         }
 
         public static StringBuilder SBWithCustomColor(string cout, int foreColor = 7, int backColor = 0)
@@ -190,5 +179,21 @@ public partial class FourWeekHomework
             sb.Append("\x1b[38;5;15m\x1b[48;5;0;m");
             return sb;
         }
+
+        public enum eImageType
+        {
+            Warrior,
+            Goblin,
+            Dragon
+        }
+        public static void DrawImage(WindowType window, eImageType image)
+        {
+            SBList[(int)window].Append(Images[(int)image]);
+        }
+        
+        public static string[] Images = { "               ..                   \n            .~:!-                   \n          !=!;~:~:                  \n           *!=:$~=                  \n           ,*~...                   \n   ,,~~~-*;!:*$$=!!~~-~~.           \n   :~==$**===!!;~~=$*!~-,           \n     ;@@@@$*!;!;;-:=#.              \n    ,$#$$$$**!;;;~:***!      .:,    \n    =#$$:=$=**!;;:*#$===;   ***~    \n  .#$==- ~$$==*::! ,!******!==*-    \n  -*=#,  .$$$!:~:;   .,,,,,,,,,     \n .**!.   ,$==!~~;!,       ..,:~,... \n -!*;  ,*###@$**=#$-         !;.    \n *=$*  ;#@$*!$###=;:.        !:.    \n $$;!   #$**;;;$*;:.         !;.    \n -*     ***!;, ~*;:.         !;.    \n       =#**;;, ##!:.         !;.    \n       =#=*!.  .@##-         !;.    \n       =#*;~   .@$:.         !;.    \n     *@@=:     @#;.          !;.    \n     *@@$-     @@*~          !;.    \n     :$**      @@!-          !;.    \n     -**.      -#;,          !;.    \n     ~$-        -#,          !;.    \n     ;!;.       :!~.        .!;.    \n     :::~       ~~~~---      :~.    ",
+            " _____         _      _  _        \n|  __ \\       | |    | |(_)       \n| |  \\/  ___  | |__  | | _  _ __  \n| | __  / _ \\ | '_ \\ | || || '_ \\ \n| |_\\ \\| (_) || |_) || || || | | |\n \\____/ \\___/ |_.__/ |_||_||_| |_|",
+            "______                                   \n|  _  \\                                  \n| | | | _ __   __ _   __ _   ___   _ __  \n| | | || '__| / _` | / _` | / _ \\ | '_ \\ \n| |/ / | |   | (_| || (_| || (_) || | | |\n|___/  |_|    \\__,_| \\__, | \\___/ |_| |_|\n                      __/ |              \n                     |___/               "
+        };
     }
 }

@@ -44,5 +44,10 @@
                 character.Effects.AddLast(EffectNode);
             character.ReStat();
         }
+
+        public void Draw(WindowType window)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

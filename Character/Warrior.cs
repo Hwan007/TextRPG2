@@ -1,4 +1,8 @@
-﻿public partial class FourWeekHomework
+﻿using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Text;
+
+public partial class FourWeekHomework
 {
     /// <summary>
     /// 유저가 사용하는 캐릭터
@@ -22,13 +26,13 @@
         /// 플래이어 캐릭터 클래스
         /// </summary>
         /// <param name="name">이름</param>
-        /// <param name="hp">초기 HP</param>
-        /// <param name="atk">초기 ATK</param>
-        public Warrior(string name, int hp, int atk)
+        /// <param name="basehp">초기 HP</param>
+        /// <param name="baseatk">초기 ATK</param>
+        public Warrior(string name, int basehp, int baseatk)
         {
             Name = name;
-            Health = BaseHealth = hp;
-            Attack = BaseAttack = atk;
+            Health = BaseHealth = basehp;
+            Attack = BaseAttack = baseatk;
             Effects = new LinkedList<IEffect>();
             Equips = new LinkedList<IEquipment>();
         }
@@ -156,19 +160,51 @@
             }
         }
 
-        public void DrawStatus(int x, int y)
+        public void Draw(WindowType window)
         {
-            Console.SetCursorPosition(x, y);
-            Console.WriteLine(Health);
-            Console.WriteLine(Attack);
-            foreach (IEquipment item in Equips)
-            {
-                item.Draw();
-            }
+            StringBuilder sb = new StringBuilder();
+            Display.DrawImage(window, Display.eImageType.Warrior);
+            sb.Append(Display.SBWithCustomColor($"{Name}  (Lv.{Level})\n"));
+            sb.Append(Display.SBWithCustomColor($"{Attack}", ColorType.Red));
+            sb.Append(" | ");
+            sb.Append(Display.SBWithCustomColor($"{Health}/{TotalHealth}\n", ColorType.Green));
+            Display.AddSBToWindow(window, sb);
             foreach (IEffect ef in Effects)
             {
-                ef.Draw();
+                ef.Draw(window);
             }
         }
+
+        public void DrawStatus(WindowType window)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(Display.SBWithCustomColor($"{Name}  (Lv.{Level})\n"));
+            sb.Append(Display.SBWithCustomColor($"공격력 : "));
+            sb.Append(Display.SBWithCustomColor($"{Attack}\n", ColorType.Red));
+            sb.Append(Display.SBWithCustomColor($"체  력 : "));
+            sb.Append(Display.SBWithCustomColor($"{Health}/{TotalHealth}\n", ColorType.Green));
+            sb.Append(Display.SBWithCustomColor($"경험치 : "));
+            sb.Append(Display.SBWithCustomColor($"{Exp}\n", ColorType.Gold));
+            sb.Append(Display.SBWithCustomColor($"장비\n"));
+            foreach (IEquipment equip in Equips)
+            {
+                equip.Draw(window);
+            }
+            Display.AddSBToWindow(window, sb);
+        }
+
+        public void EquipItem(IEquipment equipment)
+        {
+            equipment.UseItem(this);
+            ReStat();
+        }
+
+        public void UseItem(IUsableItem item)
+        {
+            item.UseItem(this);
+            ReStat();
+        }
+
+        
     }
 }
