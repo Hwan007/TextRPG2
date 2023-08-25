@@ -73,4 +73,5 @@ public partial class FourWeekHomework
     {
         public int x, y;
     }
+
 }

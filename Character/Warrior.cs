@@ -5,62 +5,38 @@
     /// </summary>
     public class Warrior : ICharacter
     {
-        private int mBaseHealth;
-        private int mTotalHealth;
-        private int mHealth;
-        private int mBaseAttack;
-        private int mAttack;
-        private int mExperiance;
+        public string Name { get; private set; }
+        public int Health { get; private set; }
+        public int TotalHealth { get; private set; }
+        public int Attack { get; private set; }
+        public bool IsDead { get { return Health == 0 ? true : false; } }
+        public int Level { get; private set; }
+        public int Exp { get; private set; }
+        public int BaseHealth { get; private set; }
+        public int BaseAttack { get; private set; }
 
         public LinkedList<IEffect> Effects { get; private set; }
         public LinkedList<IEquipment> Equips { get; private set; }
 
-        public string Name { get; private set; }
-        public int Health { get => mHealth; private set => mHealth = value; }
-        public int Attack { get => mAttack; private set => mAttack = value; }
-        public bool IsDead { get; private set; }
-        public int Level { get; private set; }
-        //효과 적용은 Base Stat에만 적용하고 이를 적용하면 다른 값도 연동해서 바뀌도록.
-        public int BaseHealth
+        /// <summary>
+        /// 플래이어 캐릭터 클래스
+        /// </summary>
+        /// <param name="name">이름</param>
+        /// <param name="hp">초기 HP</param>
+        /// <param name="atk">초기 ATK</param>
+        public Warrior(string name, int hp, int atk)
         {
-            get => mBaseHealth;
-            private set
-            {
-                mBaseHealth = value;
-                // TotalHealth를 재계산 하도록 한다.
-                mTotalHealth = SetTotalHealth();
-            }
+            Name = name;
+            Health = BaseHealth = hp;
+            Attack = BaseAttack = atk;
+            Effects = new LinkedList<IEffect>();
+            Equips = new LinkedList<IEquipment>();
         }
-        public int BaseAttack
-        {
-            get => mBaseAttack;
-            private set
-            {
-                mBaseAttack = value;
-                // Attack을 재계산 하도록 한다.
-                mAttack = SetAttack();
-            }
-        }
-        public int TotalHealth { get => mTotalHealth; private set => mTotalHealth = value; }
 
         public void TakeDamage(int damage)
         {
-            Health = Health - damage < 0 ? 0 : Health;
-            if (Health == 0) IsDead = true;
-        }
-
-        /// <summary>
-        /// 초기 스탯 HP=100, ATK=10
-        /// </summary>
-        /// <param name="name">이름</param>
-        public Warrior(string name)
-        {
-            Name = name;
-            IsDead = false;
-            Health = BaseHealth = 100;
-            Attack = BaseAttack = 10;
-            Effects = new LinkedList<IEffect>();
-            Equips = new LinkedList<IEquipment>();
+            if (damage >= 0)
+                Health = Health - damage < 0 ? 0 : Health;
         }
 
         /// <summary>
@@ -80,25 +56,26 @@
         /// <param name="ex"></param>
         public void GetEx(int ex)
         {
-            mExperiance += ex;
-            if (mExperiance >= 100)
+            if (ex >= 0)
             {
-                for (int i = 0; i < mExperiance / 100; ++i)
+                Exp += ex;
+                while (Exp >= 100)
                 {
                     LevelUP();
+                    Exp -= 100;
                 }
-                mExperiance %= 100;
             }
         }
 
         public void HPRestore(int restorePoint)
         {
-            Health = Health + restorePoint > TotalHealth ? TotalHealth : Health;
+            if (restorePoint >= 0)
+                Health = Health + restorePoint > TotalHealth ? TotalHealth : Health;
         }
 
-        private int SetTotalHealth()
+        private int GetTotalHealth()
         {
-            int total = 0;
+            int totalPlus = 0;
             int bh = BaseHealth;
             foreach (IEquipment eq in Equips)
             {
@@ -108,16 +85,15 @@
             {
                 if (ef.EffectType == eEffectType.OnTotalHealth)
                 {
-                    // 효과 적용 시키기
-                    total += ef.CalEffectPoint(bh);
+                    totalPlus += ef.CalEffectPoint(bh);
                 }
             }
-            return total + bh;
+            return totalPlus + bh;
         }
 
-        private int SetAttack()
+        private int GetAttack()
         {
-            int total = 0;
+            int totalPlus = 0;
             int ba = BaseAttack;
             foreach (IEquipment eq in Equips)
             {
@@ -127,20 +103,19 @@
             {
                 if (ef.EffectType == eEffectType.OnAttack)
                 {
-                    // 효과 적용 시키기
-                    total += ef.CalEffectPoint(ba);
+                    totalPlus += ef.CalEffectPoint(ba);
                 }
             }
-            return total + ba;
+            return totalPlus + ba;
         }
 
         public void ReStat()
         {
-            TotalHealth = SetTotalHealth();
-            Attack = SetAttack();
+            TotalHealth = GetTotalHealth();
+            Attack = GetAttack();
         }
 
-        public void TurnLoop()
+        public void TurnEffect()
         {
             // 턴마다 돌아오는 효과를 적용
             var effects = from LinkedListNode<IEffect> ef in Effects
@@ -148,38 +123,37 @@
                           select ef;
             foreach (var ef in effects)
             {
-                BattleEffect? eff = ef.ValueRef as BattleEffect;
+                BattleEffect? battleEf = ef.ValueRef as BattleEffect;
 
-                if (eff is BattleEffect valueOfEff)
+                if (battleEf != null)
                 {
-                    switch (eff.EffectType)
+                    switch (battleEf.EffectType)
                     {
                         case eEffectType.OnBattleAttack:
                             // 한번만 적용
-                            Attack += eff.CalEffectPoint(BaseAttack);
+                            Attack += battleEf.CalEffectPoint(BaseAttack);
                             break;
                         case eEffectType.OnBattleHealth:
                             // 턴마다 적용
-                            Health += eff.CalEffectPoint(BaseHealth);
+                            Health += battleEf.CalEffectPoint(BaseHealth);
                             break;
                     }
-
-                    if (eff.Time <= 0)
+                    Thread.Sleep(200);
+                    if (battleEf.Time <= 0)
                     {
-                        switch (eff.EffectType)
+                        switch (battleEf.EffectType)
                         {
                             case eEffectType.OnBattleAttack:
                                 // 원상복구
-                                Attack -= eff.CalEffectPoint(BaseAttack);
+                                Attack -= battleEf.CalEffectPoint(BaseAttack);
                                 break;
                         }
                         // 완료된 효과 제거
                         Effects.Remove(ef);
+                        Thread.Sleep(200);
                     }
                 }
             }
-            // 행동을 선택
-
         }
 
         public void DrawStatus(int x, int y)
