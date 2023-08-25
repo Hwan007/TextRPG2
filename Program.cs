@@ -1,4 +1,5 @@
-﻿using System.Reflection.Metadata.Ecma335;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.InteropServices;
 
 public class Program
@@ -18,12 +19,20 @@ public class Program
         // You need set flag ENABLE_VIRTUAL_TERMINAL_PROCESSING(0x4) by SetConsoleMode
         SetConsoleMode(handle, mode | 0x4);
 
+        Console.SetWindowSize(150, 60);
+
+        Game.Display.DrawImage(Game.WindowType.Left, Game.Display.eImageType.Warrior);
+        Game.Display.DrawImage(Game.WindowType.Right, Game.Display.eImageType.Dragon);
+        Game.Display.OpenWindow(Game.WindowType.Left);
+        Game.Display.UpdateCurrentWindow();
+        Game.Display.OpenWindow(Game.WindowType.Right);
+        Game.Display.UpdateCurrentWindow();
 
         Console.ReadLine();
     }
 }
 
-public partial class FourWeekHomework
+public partial class Game
 {
     public interface IDraw
     {

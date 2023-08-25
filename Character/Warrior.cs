@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Text;
 
-public partial class FourWeekHomework
+public partial class Game
 {
     /// <summary>
     /// 유저가 사용하는 캐릭터

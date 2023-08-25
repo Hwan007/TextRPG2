@@ -1,4 +1,4 @@
-﻿public partial class FourWeekHomework
+﻿public partial class Game
 {
     public class EquipEffet : IEffect
     {
@@ -23,9 +23,9 @@
             throw new NotImplementedException();
         }
 
-        public void Draw()
+        public void Draw(WindowType window)
         {
-            Console.WriteLine("{0} => {1}{2}", Name, ATK == 0 ? "" : $"ATK {ATK} ", HP == 0 ? "" : $"HP {HP}");
+            throw new NotImplementedException();
         }
     }
 }

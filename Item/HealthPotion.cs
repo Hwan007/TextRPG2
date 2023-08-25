@@ -1,4 +1,4 @@
-﻿public partial class FourWeekHomework
+﻿public partial class Game
 {
     public class HealthPotion : IUsableItem
     {
@@ -21,9 +21,10 @@
         {
             character.Effects.AddLast(EffectNode);
         }
-        public void Draw()
-        {
 
+        public void Draw(WindowType window)
+        {
+            throw new NotImplementedException();
         }
     }
 }

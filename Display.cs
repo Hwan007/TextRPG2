@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-public partial class FourWeekHomework
+public partial class Game
 {
     /// <summary>
     /// 화면을 나누어 글을 뿌린다.
@@ -9,7 +9,13 @@ public partial class FourWeekHomework
     {
         static WindowType currentWindow = WindowType.Full;
         static Stack<WindowType> windowStack = new Stack<WindowType>();
-        static StringBuilder[] SBList = new StringBuilder[(int)WindowType.End];
+        static StringBuilder[] SBList = new StringBuilder[(int)WindowType.End] {
+            new StringBuilder() { },
+            new StringBuilder() { },
+            new StringBuilder() { },
+            new StringBuilder() { },
+            new StringBuilder() { },
+            new StringBuilder() { }};
         /// <summary>
         /// 해당 윈도우 StringBuilder에 더한다.
         /// </summary>
@@ -97,13 +103,14 @@ public partial class FourWeekHomework
         /// 윈도우 종류에 대해서는 eWindowType를 참고.
         /// </summary>
         private static sWindowSize[] mWindowSizes = new sWindowSize[(int)WindowType.End] {
-        new sWindowSize() { Width=80-4, Height=20-2, StartX=+2, StartY=0+1 },
-        new sWindowSize() { Width=80-4, Height=10-2, StartX=+2, StartY=0+1 },
-        new sWindowSize() { Width=80-4, Height=10-2, StartX=+2, StartY=10+1 },
-        new sWindowSize() { Width=40-4, Height=20-2, StartX=+2, StartY=0+1 },
-        new sWindowSize() { Width=40-4, Height=20-2, StartX=40+2, StartY=0+1 },
-        new sWindowSize() { Width=40-4, Height=10-2, StartX=20+2, StartY=5+1 },
+        new sWindowSize() { Width=150-4, Height=60-2, StartX=+2, StartY=0+1 },
+        new sWindowSize() { Width=150-4, Height=30-2, StartX=+2, StartY=0+1 },
+        new sWindowSize() { Width=150-4, Height=30-2, StartX=+2, StartY=30+1 },
+        new sWindowSize() { Width=75-4, Height=60-2, StartX=+2, StartY=0+1 },
+        new sWindowSize() { Width=75-4, Height=60-2, StartX=75+2, StartY=0+1 },
+        new sWindowSize() { Width=50-4, Height=20-2, StartX=50+2, StartY=30+1 },
         };
+
 
         /// <summary>
         /// Width를 넘는지 계산해서 1개의 StringBuilder마다 1줄로 리턴한다. Height를 넘은 줄은 리턴하지 않는다.

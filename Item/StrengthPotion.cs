@@ -1,4 +1,4 @@
-﻿public partial class FourWeekHomework
+﻿public partial class Game
 {
     public class StrengthPotion : IUsableItem
     {
@@ -16,9 +16,10 @@
         {
             throw new NotImplementedException();
         }
-        public void Draw()
-        {
 
+        public void Draw(WindowType window)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿public partial class FourWeekHomework
+﻿public partial class Game
 {
     public class Armor : IEquipment
     {

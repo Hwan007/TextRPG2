@@ -1,4 +1,4 @@
-﻿public partial class FourWeekHomework
+﻿public partial class Game
 {
     public class BattleEffect : IEffect
     {
@@ -18,11 +18,6 @@
             else throw new Exception("Effect type and stat is not match.");
             if ((ef == eEffectType.OnBattleHealth || ef == eEffectType.OnTotalHealth) && hp.HasValue) { HP = hp.Value; }
             else throw new Exception("Effect type and stat is not match.");
-        }
-
-        public void Draw()
-        {
-            Console.WriteLine("{0} => {1}{2}가 {3}턴 동안 적용", Name, ATK == 0 ? "" : $"ATK {ATK} ", HP == 0 ? "" : $"HP {HP}", Time);
         }
 
         public int CalEffectPoint(int basePoint)
@@ -50,6 +45,11 @@
         public void AddEffect(ICharacter character)
         {
             character.Effects.AddLast(this);
+        }
+
+        public void Draw(WindowType window)
+        {
+            throw new NotImplementedException();
         }
     }
 }

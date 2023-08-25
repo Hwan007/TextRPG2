@@ -1,7 +1,7 @@
 ﻿using System.Reflection.Emit;
 using System.Text;
 
-public partial class FourWeekHomework
+public partial class Game
 {
     public class Monster : ICharacter
     {
