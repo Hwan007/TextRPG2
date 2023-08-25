@@ -1,4 +1,6 @@
-﻿public partial class FourWeekHomework
+﻿using System.Text;
+
+public partial class FourWeekHomework
 {
     public class Goblin : Monster
     {
@@ -7,6 +9,11 @@
         {
             ++count;
             Name = $"{Name} {count}";
+        }
+        public override void Draw(WindowType window)
+        {
+            Display.DrawImage(window, Display.eImageType.Goblin);
+            base.Draw(window);
         }
     }
 }

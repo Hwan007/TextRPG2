@@ -1,27 +1,40 @@
-﻿public partial class FourWeekHomework
+﻿using System.Reflection.Emit;
+using System.Text;
+
+public partial class FourWeekHomework
 {
     public class Monster : ICharacter
     {
-        private int mHealth;
-        private int mAttack;
         public string Name { get; protected set; }
-        public int Health { get => mHealth; protected set => mHealth = value; }
-        public int Attack { get => mAttack; protected set => mAttack = value; }
-        public bool IsDead { get; protected set; }
+        public int Health { get; protected set; }
+        public int Attack { get; protected set; }
+        public bool IsDead { get => Health == 0 ? true : false; }
         public LinkedList<IEffect> Effects { get; private set; }
 
         public void TakeDamage(int damage)
         {
             Health = Health - damage < 0 ? 0 : Health;
-            if (Health == 0) IsDead = true;
         }
 
-        public void DrawStatus(int x, int y)
+        public virtual void DrawStatus(WindowType window)
         {
-            Console.SetCursorPosition(x, y);
-            Console.WriteLine(Name);
-            Console.WriteLine(Health);
-            Console.WriteLine(Attack);
+            StringBuilder sb = new StringBuilder();
+            sb.Append(Display.SBWithCustomColor($"{Name}\n"));
+            sb.Append(Display.SBWithCustomColor($"공격력 : "));
+            sb.Append(Display.SBWithCustomColor($"{Attack}\n", ColorType.Red));
+            sb.Append(Display.SBWithCustomColor($"체  력 : "));
+            sb.Append(Display.SBWithCustomColor($"{Health}\n", ColorType.Green));
+            Display.AddSBToWindow(window, sb);
+        }
+
+        public virtual void Draw(WindowType window)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(Display.SBWithCustomColor($"{Name}\n"));
+            sb.Append(Display.SBWithCustomColor($"{Attack}", ColorType.Red));
+            sb.Append(" | ");
+            sb.Append(Display.SBWithCustomColor($"{Health}\n", ColorType.Green));
+            Display.AddSBToWindow(window, sb);
         }
 
         public Monster(string name, int hp, int atk)
@@ -29,7 +42,6 @@
             Name = name;
             Health = hp;
             Attack = atk;
-            IsDead = false;
             Effects = new LinkedList<IEffect>();
         }
 

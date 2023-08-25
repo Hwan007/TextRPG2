@@ -1,4 +1,5 @@
 ﻿using System.Reflection.Metadata.Ecma335;
+using System.Runtime.InteropServices;
 
 public class Program
 {
@@ -24,23 +25,24 @@ public class Program
 
 public partial class FourWeekHomework
 {
-    public interface ICharacter
+    public interface IDraw
+    {
+        public void Draw(WindowType window);
+    }
+    public interface ICharacter : IDraw
     {
         public string Name { get; }
         public int Health { get; }
         public int Attack { get; }
         public bool IsDead { get; }
         public void TakeDamage(int damage);
-        public void DrawStatus(int x, int y);
-
         public LinkedList<IEffect> Effects { get; }
     }
 
-    public interface IItem
+    public interface IItem : IDraw
     {
         public string Name { get; }
         public void UseItem(Warrior character);
-        public void Draw();
     }
 
     public interface IUsableItem : IItem
@@ -74,18 +76,42 @@ public partial class FourWeekHomework
         OnBattleAttack
     }
 
-    public interface IEffect
+    public interface IEffect : IDraw
     {
         public string Name { get; }
         public eEffectType EffectType { get; }
         public void AddEffect(ICharacter character);
         public int CalEffectPoint(int basePoint);
-        public void Draw();
     }
 
     public struct Vector2
     {
         public int x, y;
     }
+    public enum WindowType
+    {
+        Full,
+        Top,
+        Bottom,
+        Left,
+        Right,
+        Center,
+        End
+    }
+
+    public enum ColorType
+    {
+        Gold = 178,
+        Red = 160,
+        Gray = 7,
+        White = 15,
+        Black = 16,
+        Orange = 208,
+        PurpleBlue = 75,
+        Green = 76,
+        Yellow = 226,
+        Mint = 121
+    }
+
 
 }
