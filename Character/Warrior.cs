@@ -160,14 +160,14 @@ public partial class Game
             }
         }
 
-        public void Draw(WindowType window)
+        public void Draw(eWindowType window)
         {
             StringBuilder sb = new StringBuilder();
             Display.DrawImage(window, Display.eImageType.Warrior);
             sb.Append(Display.SBWithCustomColor($"{Name}  (Lv.{Level})\n"));
-            sb.Append(Display.SBWithCustomColor($"{Attack}", ColorType.Red));
+            sb.Append(Display.SBWithCustomColor($"{Attack}", eColorType.Red));
             sb.Append(" | ");
-            sb.Append(Display.SBWithCustomColor($"{Health}/{TotalHealth}\n", ColorType.Green));
+            sb.Append(Display.SBWithCustomColor($"{Health}/{TotalHealth}\n", eColorType.Green));
             Display.AddSBToWindow(window, sb);
             foreach (IEffect ef in Effects)
             {
@@ -175,16 +175,16 @@ public partial class Game
             }
         }
 
-        public void DrawStatus(WindowType window)
+        public void DrawStatus(eWindowType window)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(Display.SBWithCustomColor($"{Name}  (Lv.{Level})\n"));
             sb.Append(Display.SBWithCustomColor($"공격력 : "));
-            sb.Append(Display.SBWithCustomColor($"{Attack}\n", ColorType.Red));
+            sb.Append(Display.SBWithCustomColor($"{Attack}\n", eColorType.Red));
             sb.Append(Display.SBWithCustomColor($"체  력 : "));
-            sb.Append(Display.SBWithCustomColor($"{Health}/{TotalHealth}\n", ColorType.Green));
+            sb.Append(Display.SBWithCustomColor($"{Health}/{TotalHealth}\n", eColorType.Green));
             sb.Append(Display.SBWithCustomColor($"경험치 : "));
-            sb.Append(Display.SBWithCustomColor($"{Exp}\n", ColorType.Gold));
+            sb.Append(Display.SBWithCustomColor($"{Exp}\n", eColorType.Gold));
             sb.Append(Display.SBWithCustomColor($"장비\n"));
             foreach (IEquipment equip in Equips)
             {

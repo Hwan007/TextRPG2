@@ -10,7 +10,7 @@ public partial class Game
             ++count;
             Name = $"{Name} {count}";
         }
-        public override void Draw(WindowType window)
+        public override void Draw(eWindowType window)
         {
             Display.DrawImage(window, Display.eImageType.Goblin);
             base.Draw(window);

@@ -16,24 +16,24 @@ public partial class Game
             Health = Health - damage < 0 ? 0 : Health;
         }
 
-        public virtual void DrawStatus(WindowType window)
+        public virtual void DrawStatus(eWindowType window)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(Display.SBWithCustomColor($"{Name}\n"));
             sb.Append(Display.SBWithCustomColor($"공격력 : "));
-            sb.Append(Display.SBWithCustomColor($"{Attack}\n", ColorType.Red));
+            sb.Append(Display.SBWithCustomColor($"{Attack}\n", eColorType.Red));
             sb.Append(Display.SBWithCustomColor($"체  력 : "));
-            sb.Append(Display.SBWithCustomColor($"{Health}\n", ColorType.Green));
+            sb.Append(Display.SBWithCustomColor($"{Health}\n", eColorType.Green));
             Display.AddSBToWindow(window, sb);
         }
 
-        public virtual void Draw(WindowType window)
+        public virtual void Draw(eWindowType window)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(Display.SBWithCustomColor($"{Name}\n"));
-            sb.Append(Display.SBWithCustomColor($"{Attack}", ColorType.Red));
+            sb.Append(Display.SBWithCustomColor($"{Attack}", eColorType.Red));
             sb.Append(" | ");
-            sb.Append(Display.SBWithCustomColor($"{Health}\n", ColorType.Green));
+            sb.Append(Display.SBWithCustomColor($"{Health}\n", eColorType.Green));
             Display.AddSBToWindow(window, sb);
         }
 

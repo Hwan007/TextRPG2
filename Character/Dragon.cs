@@ -9,7 +9,7 @@
             Name = $"{Name} {count}";
         }
 
-        public override void Draw(WindowType window)
+        public override void Draw(eWindowType window)
         {
             Display.DrawImage(window, Display.eImageType.Dragon);
             base.Draw(window);

@@ -19,14 +19,25 @@ public class Program
         // You need set flag ENABLE_VIRTUAL_TERMINAL_PROCESSING(0x4) by SetConsoleMode
         SetConsoleMode(handle, mode | 0x4);
 
-        Console.SetWindowSize(150, 60);
+        Console.SetWindowSize(Game.Display.ConsoleWidth, Game.Display.ConsoleHeight);
 
-        Game.Display.DrawImage(Game.WindowType.Left, Game.Display.eImageType.Warrior);
-        Game.Display.DrawImage(Game.WindowType.Right, Game.Display.eImageType.Dragon);
-        Game.Display.OpenWindow(Game.WindowType.Left);
-        Game.Display.UpdateCurrentWindow();
-        Game.Display.OpenWindow(Game.WindowType.Right);
-        Game.Display.UpdateCurrentWindow();
+        Game.Display.DrawImage(Game.eWindowType.Left, Game.Display.eImageType.Warrior);
+        Game.Display.DrawImage(Game.eWindowType.Right, Game.Display.eImageType.Dragon);
+        Game.Display.DrawImage(Game.eWindowType.Center, Game.Display.eImageType.Goblin);
+
+        Game.Display.OpenWindow(Game.eWindowType.Center);
+        Console.ReadLine();
+        Game.Display.OpenWindow(Game.eWindowType.Right);
+        Console.ReadLine();
+        Game.Display.OpenWindow(Game.eWindowType.Left);
+        Console.ReadLine();
+        Game.Display.CloseCurrentWindow();
+        Console.ReadLine();
+        Game.Display.CloseCurrentWindow();
+        Console.ReadLine();
+        Game.Display.OpenWindow(Game.eWindowType.Center);
+        Console.ReadLine();
+        Game.Display.OpenWindow(Game.eWindowType.Right);
 
         Console.ReadLine();
     }
@@ -36,7 +47,7 @@ public partial class Game
 {
     public interface IDraw
     {
-        public void Draw(WindowType window);
+        public void Draw(eWindowType window);
     }
     public interface ICharacter : IDraw
     {
@@ -97,7 +108,7 @@ public partial class Game
     {
         public int x, y;
     }
-    public enum WindowType
+    public enum eWindowType
     {
         Full,
         Top,
@@ -108,7 +119,7 @@ public partial class Game
         End
     }
 
-    public enum ColorType
+    public enum eColorType
     {
         Gold = 178,
         Red = 160,

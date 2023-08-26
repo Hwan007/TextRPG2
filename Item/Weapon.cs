@@ -36,7 +36,7 @@
                 character.Effects.AddLast(EffectNode);
             character.ReStat();
         }
-        public void Draw(WindowType window)
+        public void Draw(eWindowType window)
         {
             throw new NotImplementedException();
         }

@@ -47,7 +47,7 @@
             character.Effects.AddLast(this);
         }
 
-        public void Draw(WindowType window)
+        public void Draw(eWindowType window)
         {
             throw new NotImplementedException();
         }
