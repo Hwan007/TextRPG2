@@ -198,6 +198,7 @@ public partial class Game
                 }
                 currentSb.Append(c);
             }
+            sb.Add(currentSb);
             return sb.ToArray();
         }
 

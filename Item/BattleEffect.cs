@@ -1,4 +1,6 @@
-﻿public partial class Game
+﻿using System.Text;
+
+public partial class Game
 {
     public class BattleEffect : IEffect
     {
@@ -7,6 +9,7 @@
         public int? ATK { get; private set; }
         public int? HP { get; private set; }
         public eEffectType EffectType { get; private set; }
+        private bool mIsUsed=false;
 
         public BattleEffect(string name, eEffectType ef, int time, int? atk, int? hp)
         {
@@ -15,9 +18,7 @@
             Time = time;
 
             if ((ef == eEffectType.OnBattleAttack || ef == eEffectType.OnAttack) && atk.HasValue) { ATK = atk.Value; }
-            else throw new Exception("Effect type and stat is not match.");
             if ((ef == eEffectType.OnBattleHealth || ef == eEffectType.OnTotalHealth) && hp.HasValue) { HP = hp.Value; }
-            else throw new Exception("Effect type and stat is not match.");
         }
 
         public int CalEffectPoint(int basePoint)
@@ -27,18 +28,22 @@
             switch (EffectType)
             {
                 case eEffectType.OnTotalHealth:
-
+                    if (mIsUsed == false)
+                        point = HP.Value;
                     break;
                 case eEffectType.OnAttack:
-
+                    if (mIsUsed == false)
+                        point = ATK.Value;
                     break;
                 case eEffectType.OnBattleHealth:
-
+                    point = HP.Value;
                     break;
                 case eEffectType.OnBattleAttack:
-
+                    if (mIsUsed == false)
+                        point = ATK.Value;
                     break;
             }
+            mIsUsed = true;
             return point;
         }
 
@@ -49,7 +54,17 @@
 
         public void Draw(eWindowType window)
         {
-            throw new NotImplementedException();
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"{Name} | ");
+            if (ATK.HasValue)
+            {
+                sb.Append($"ATK +{ATK}");
+            }
+            else if (HP.HasValue)
+            {
+                sb.Append($"HP +{HP}");
+            }
+            Display.AddSBToWindow(window, sb);
         }
     }
 }

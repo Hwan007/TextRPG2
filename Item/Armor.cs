@@ -1,32 +1,28 @@
-﻿public partial class Game
+﻿using System.Text;
+
+public partial class Game
 {
     public class Armor : IEquipment
     {
         public int Health { get; private set; }
-        public int Attack { get; private set; }
+        public int Point { get; private set; }
         public string Name { get; private set; }
         public EquipEffet? EquipEffect { get; private set; }
-
         public LinkedListNode<IEffect> EffectNode { get; private set; }
 
-        public Armor(string name, int hp, int atk)
+        public Armor(string name, int hp, int def)
         {
             Name = name;
             Health = hp;
-            Attack = atk;
+            Point = def;
         }
-        public Armor(string name, int hp, int atk, EquipEffet effect)
+        public Armor(string name, int hp, int def, EquipEffet effect)
         {
             Name = name;
             Health = hp;
-            Attack = atk;
+            Point = def;
             EquipEffect = effect;
             EffectNode = new LinkedListNode<IEffect>(effect);
-        }
-
-        public void Draw()
-        {
-            Console.WriteLine($"{Name} => HP({Health}) ATK({Attack})");
         }
 
         public void UnuseItem(Warrior character)
@@ -47,7 +43,16 @@
 
         public void Draw(eWindowType window)
         {
-            throw new NotImplementedException();
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"{Name} | HP +{Health} | DEF +{Point} | {EquipEffect?.Name}");
+            Display.AddSBToWindow(window, sb);
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"{Name} | HP +{Health} | DEF +{Point} | {EquipEffect?.Name}");
+            return sb.ToString();
         }
     }
 }
