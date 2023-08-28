@@ -1,8 +1,12 @@
 # TextRPG2
 
+
+https://github.com/Hwan007/TextRPG2/assets/96556920/ada15699-97e7-48ea-8a42-d806aed78fd1
+
+
 ## 파일별 설명
 
-#### ./Display.cs
+### Display.cs
 
 화면에 출력하는 기능을 모아두었습니다.
 
@@ -37,51 +41,51 @@
 </br>
 등의 함수로 구성되어 있습니다.
 
-#### Program.cs
+### Program.cs
 
 구성된 여러 인터페이스와 게임 시작하는 곳입니다.
 
-#### Stage.cs
+### Stage.cs
 
 게임이 주기적으로 돌아가는 장소입니다. 생성될 때마다 랜덤으로 몬스토를 고블린, 드래곤 중에 고르게 되며, 몬스터는 랜덤으로 보상을 가지고 있습니다. 모든 몬스터를 잡게되면 새로운 스태이지를 생성합니다.
 
-#### Character/Dragon.cs
+### Character/Dragon.cs
 
-드래곤 몬스터 클래스입니다. 특별한 보상을 가질 수 있습니다.
+드래곤 몬스터 클래스입니다. 특별한 보상을 가질 수 있습니다. 5턴 동안 매턴 적용되는 체력 회복 포션, 강력한 장비 등.
 
-#### Character/Goblin.cs
+### Character/Goblin.cs
 
 고블린 몬스터 클래스입니다. 회복약 보상을 가질 수 있습니다.
 
-#### Character/Monster.cs
+### Character/Monster.cs
 
 드래곤, 고블린이 상속하는 몬스터에 대한 부모 클래스입니다.
 
-#### Character/Warrior.cs
+### Character/Warrior.cs
 
 플래이어 캐릭터 클래스입니다. 레벨업이 있으나 죄송하지만 구현되어 있지 않습니다.
 
-#### /Item/Armor.cs
+### /Item/Armor.cs
 
 플래이어 캐릭터가 착용할 수 있는 방어구 클래스입니다. 이펙트를 가질 수 있습니다.
 
-#### /Item/Weapon.cs
+### /Item/Weapon.cs
 
 플래이어 캐릭터가 착용할 수 있는 무기 클래스입니다. 이펙트를 가질 수 있습니다.
 
-#### /Item/StrengthPostion.cs
+### /Item/StrengthPostion.cs
 
 플래이어 캐릭터가 사용할 수 있는 힘 강화 포션 클래스입니다. 이펙트를 기본적으로 가지고 있습니다.
 
-#### /Item/HealthPostion.cs
+### /Item/HealthPostion.cs
 
 플래이어 캐릭터가 사용할 수 있는 체력 회복 포션입니다. 이펙트를 기본적으로 가지고 있습니다.</br>
 사실 이렇게 나누지 않아도 됩니다. 포션으로 해두고 eUsableType로 구분되어 있으므로 객체만 생성해서 넘겨주어도 HealthPostion과 StrengthPostion 구분이 가능합니다.
 
-#### /Item/BattleEffect.cs
+### /Item/BattleEffect.cs
 
 턴마다 적용되는 효과에 대한 클래스입니다. 체력회복, 힘 강화 모두 이 클래스를 통해 구현됩니다.
 
-#### /Item/EquipEffect.cs
+### /Item/EquipEffect.cs
 
 장비에 붙은 영구적 효과에 대한 클래스입니다. BattleEffect와 차이점은 제한 턴수 Time 변수가 존재하지 않는 다는 것 뿐입니다.
