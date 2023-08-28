@@ -1,24 +1,36 @@
-﻿public partial class FourWeekHomework
+﻿using System.Text;
+using static Game;
+
+public partial class Game
 {
     public class StrengthPotion : IUsableItem
     {
         public string Name { get; private set; }
-        public int Point { get; private set; }
-        public BattleEffect BattleEffect { get; private set; }
+        public int Point { get => Effect.ATK??0; }
+        public BattleEffect Effect { get; private set; }
         public eUsableType UsableType { get; private set; }
-        public LinkedListNode<IEffect> EffectNode { get; private set; }
 
-        public StrengthPotion(string name)
+        public StrengthPotion(string name, int time, int point)
         {
             Name = name;
+            Effect = new BattleEffect(name, eEffectType.OnBattleAttack, time, point, null);
         }
         public void UseItem(Warrior character)
         {
-            throw new NotImplementedException();
+            Effect.AddEffect(character);
         }
-        public void Draw()
-        {
 
+        public void Draw(eWindowType window)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"{Name} | {Effect.Name} | {Effect.Time}회 적용");
+            Display.AddSBToWindow(window, sb);
+        }
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"{Name} | ATK +{Point} | {Effect?.Name}");
+            return sb.ToString();
         }
     }
 }

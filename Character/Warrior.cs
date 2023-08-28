@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Text;
 
-public partial class FourWeekHomework
+public partial class Game
 {
     /// <summary>
     /// 유저가 사용하는 캐릭터
@@ -10,10 +10,19 @@ public partial class FourWeekHomework
     public class Warrior : ICharacter
     {
         public string Name { get; private set; }
-        public int Health { get; private set; }
+        private int mHealth;
+        public int Health
+        {
+            get => mHealth;
+            private set
+            {
+                if (value > TotalHealth) mHealth = TotalHealth;
+                else mHealth = value;
+            }
+        }
         public int TotalHealth { get; private set; }
         public int Attack { get; private set; }
-        public bool IsDead { get { return Health == 0 ? true : false; } }
+        public bool IsDead { get { return Health <= 0 ? true : false; } }
         public int Level { get; private set; }
         public int Exp { get; private set; }
         public int BaseHealth { get; private set; }
@@ -31,16 +40,18 @@ public partial class FourWeekHomework
         public Warrior(string name, int basehp, int baseatk)
         {
             Name = name;
-            Health = BaseHealth = basehp;
-            Attack = BaseAttack = baseatk;
+            BaseHealth = basehp;
+            BaseAttack = baseatk;
             Effects = new LinkedList<IEffect>();
             Equips = new LinkedList<IEquipment>();
+            ReStat();
+            Health = BaseHealth;
         }
 
         public void TakeDamage(int damage)
         {
             if (damage >= 0)
-                Health = Health - damage < 0 ? 0 : Health;
+                Health = Health - damage < 0 ? 0 : Health - damage;
         }
 
         /// <summary>
@@ -101,7 +112,7 @@ public partial class FourWeekHomework
             int ba = BaseAttack;
             foreach (IEquipment eq in Equips)
             {
-                ba += eq.Attack;
+                ba += eq.Point;
             }
             foreach (IEffect ef in Effects)
             {
@@ -122,12 +133,11 @@ public partial class FourWeekHomework
         public void TurnEffect()
         {
             // 턴마다 돌아오는 효과를 적용
-            var effects = from LinkedListNode<IEffect> ef in Effects
-                          where ef.ValueRef.GetType() == typeof(BattleEffect)
-                          select ef;
+            var effects = Effects.Where((x) => x.EffectType >= eEffectType.OnBattleHealth);
+            List<IEffect> removeList = new List<IEffect>();
             foreach (var ef in effects)
             {
-                BattleEffect? battleEf = ef.ValueRef as BattleEffect;
+                BattleEffect? battleEf = ef as BattleEffect;
 
                 if (battleEf != null)
                 {
@@ -142,7 +152,7 @@ public partial class FourWeekHomework
                             Health += battleEf.CalEffectPoint(BaseHealth);
                             break;
                     }
-                    Thread.Sleep(200);
+                    //Thread.Sleep(1000);
                     if (battleEf.Time <= 0)
                     {
                         switch (battleEf.EffectType)
@@ -153,21 +163,23 @@ public partial class FourWeekHomework
                                 break;
                         }
                         // 완료된 효과 제거
-                        Effects.Remove(ef);
-                        Thread.Sleep(200);
+                        removeList.Add(ef);
+                        //Thread.Sleep(1000);
                     }
                 }
             }
+            foreach (var ef in removeList)
+                Effects.Remove(ef);
         }
 
-        public void Draw(WindowType window)
+        public void Draw(eWindowType window)
         {
             StringBuilder sb = new StringBuilder();
             Display.DrawImage(window, Display.eImageType.Warrior);
-            sb.Append(Display.SBWithCustomColor($"{Name}  (Lv.{Level})\n"));
-            sb.Append(Display.SBWithCustomColor($"{Attack}", ColorType.Red));
+            sb.Append(Display.SBWithCustomColor($"\n{Name}  (Lv.{Level})\n"));
+            sb.Append(Display.SBWithCustomColor($"{Attack}", eColorType.Red));
             sb.Append(" | ");
-            sb.Append(Display.SBWithCustomColor($"{Health}/{TotalHealth}\n", ColorType.Green));
+            sb.Append(Display.SBWithCustomColor($"{Health}/{TotalHealth}\n", eColorType.Green));
             Display.AddSBToWindow(window, sb);
             foreach (IEffect ef in Effects)
             {
@@ -175,16 +187,16 @@ public partial class FourWeekHomework
             }
         }
 
-        public void DrawStatus(WindowType window)
+        public void DrawStatus(eWindowType window)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append(Display.SBWithCustomColor($"{Name}  (Lv.{Level})\n"));
+            sb.Append(Display.SBWithCustomColor($"\n{Name}  (Lv.{Level})\n"));
             sb.Append(Display.SBWithCustomColor($"공격력 : "));
-            sb.Append(Display.SBWithCustomColor($"{Attack}\n", ColorType.Red));
+            sb.Append(Display.SBWithCustomColor($"{Attack}\n", eColorType.Red));
             sb.Append(Display.SBWithCustomColor($"체  력 : "));
-            sb.Append(Display.SBWithCustomColor($"{Health}/{TotalHealth}\n", ColorType.Green));
+            sb.Append(Display.SBWithCustomColor($"{Health}/{TotalHealth}\n", eColorType.Green));
             sb.Append(Display.SBWithCustomColor($"경험치 : "));
-            sb.Append(Display.SBWithCustomColor($"{Exp}\n", ColorType.Gold));
+            sb.Append(Display.SBWithCustomColor($"{Exp}\n", eColorType.Gold));
             sb.Append(Display.SBWithCustomColor($"장비\n"));
             foreach (IEquipment equip in Equips)
             {
@@ -205,6 +217,6 @@ public partial class FourWeekHomework
             ReStat();
         }
 
-        
+
     }
 }
